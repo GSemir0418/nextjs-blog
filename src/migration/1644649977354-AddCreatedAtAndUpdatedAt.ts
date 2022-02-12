@@ -1,0 +1,62 @@
+import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
+
+export class AddCreatedAtAndUpdatedAt1644649977354
+  implements MigrationInterface
+{
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // 分别向三个表添加CreatedAt和UpdatedAt字段
+    await queryRunner.addColumns("users", [
+      new TableColumn({
+        name: "createdAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+      new TableColumn({
+        name: "updatedAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+    ]);
+    await queryRunner.addColumns("posts", [
+      new TableColumn({
+        name: "createdAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+      new TableColumn({
+        name: "updatedAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+    ]);
+    await queryRunner.addColumns("comments", [
+      new TableColumn({
+        name: "createdAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+      new TableColumn({
+        name: "updatedAt",
+        type: "timestamp",
+        isNullable: false,
+        default: "now()",
+      }),
+    ]);
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    try {
+      await queryRunner.dropColumn("users", "createdAt");
+      await queryRunner.dropColumn("users", "updatedAt");
+      await queryRunner.dropColumn("posts", "createdAt");
+      await queryRunner.dropColumn("posts", "updatedAt");
+      await queryRunner.dropColumn("comments", "createdAt");
+      await queryRunner.dropColumn("comments", "updatedAt");
+    } catch (error) {}
+  }
+}
