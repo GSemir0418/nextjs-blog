@@ -1,3 +1,4 @@
+import withSession from "lib/withSession";
 import { NextApiHandler } from "next";
 import SignIn from "src/model/SignIn";
 
@@ -10,8 +11,11 @@ const Sessions: NextApiHandler = async (req, res) => {
     res.statusCode = 422;
     res.end(JSON.stringify(signIn.errors));
   } else {
+    // 登录成功时将user保存至服务器的session['currentUser']
+    req.session.set("currentUser", signIn.user);
+    await req.session.save();
     res.statusCode = 200;
     res.end(JSON.stringify(signIn.user));
   }
 };
-export default Sessions;
+export default withSession(Sessions);
