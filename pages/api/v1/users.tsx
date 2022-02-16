@@ -6,7 +6,7 @@ import { User } from "src/entity/User";
 const Users: NextApiHandler = async (req, res) => {
   // 在req.body中获取请求数据
   const { username, password, passwordConfirm } = req.body;
-  res.setHeader("Content-Type", "application/json;Chartset:UTF-8");
+  res.setHeader("Content-Type", "application/json;chartset:utf-8");
   const connection = await getDatabaseConnection();
   const user = new User();
   user.username = username;
