@@ -15,8 +15,8 @@ type Props = {
 const Form: React.FC<Props> = (props) => {
   return (
     <form onSubmit={props.onSubmit}>
-      {props.fields.map((field) => (
-        <div>
+      {props.fields.map((field, index) => (
+        <div key={index}>
           <label>
             {field.label}
             <input
