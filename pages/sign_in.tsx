@@ -1,10 +1,12 @@
 import axios from "axios";
+import Form from "components/Form";
 import withSession from "lib/withSession";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { useCallback, useState } from "react";
 import { User } from "src/entity/User";
 
 const signIn: NextPage<{ user: User }> = (props) => {
+  // 表格数据
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -14,6 +16,7 @@ const signIn: NextPage<{ user: User }> = (props) => {
     username: [],
     password: [],
   });
+  // 表单提交
   const onSubmit = useCallback(
     (e) => {
       // 禁用默认事件
@@ -35,59 +38,45 @@ const signIn: NextPage<{ user: User }> = (props) => {
     },
     [formData]
   );
+  // onChange也可以进一步抽离
+  const onChange = useCallback(
+    (key, value) => {
+      // key可以用占位符的形式
+      setFormData({ ...formData, [key]: value });
+    },
+    [formData]
+  );
   return (
     <>
       {props.user && <div>当前登录的用户为{props.user.username}</div>}
       <h1>用户登录</h1>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>
-            用户名:{" "}
-            <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  username: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div>
-          {errorData.username?.length > 0 && errorData.username.join(",")}
-        </div>
-        <div>
-          <label>
-            密码:{" "}
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  password: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div>
-          {errorData.password?.length > 0 && errorData.password.join(",")}
-        </div>
-        <div>
-          <button type="submit">登录</button>
-        </div>
-      </form>
+      <Form
+        onSubmit={onSubmit}
+        fields={[
+          {
+            label: "用户名",
+            type: "text",
+            value: formData.username,
+            onChange: (e) => onChange("username", e.target.value),
+            errors: errorData.username,
+          },
+          {
+            label: "密码",
+            type: "password",
+            value: formData.password,
+            onChange: (e) => onChange("password", e.target.value),
+            errors: errorData.password,
+          },
+        ]}
+        buttons={<button type="submit">登录</button>}
+      />
     </>
   );
 };
 export default signIn;
 
 export const getServerSideProps: GetServerSideProps = withSession(
-  // @ts-ignore
-  async (context) => {
+  async (context: GetServerSidePropsContext) => {
     // @ts-ignore
     const user = context.req.session.get("currentUser");
     return {

@@ -1,8 +1,10 @@
 import axios from "axios";
+import Form from "components/Form";
 import { NextPage } from "next";
 import { useCallback, useState } from "react";
 
 const signUp: NextPage = () => {
+  // 表单数据
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -14,6 +16,7 @@ const signUp: NextPage = () => {
     password: [],
     passwordConfirm: [],
   });
+  // 表单提交
   const onSubmit = useCallback(
     (e) => {
       // 禁用默认事件
@@ -36,69 +39,43 @@ const signUp: NextPage = () => {
     },
     [formData]
   );
+  // onChange抽离
+  const onChange = useCallback(
+    (key, value) => {
+      setFormData({ ...formData, [key]: value });
+    },
+    [formData]
+  );
   return (
     <>
       <h1>注册页面</h1>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label>
-            用户名:{" "}
-            <input
-              type="text"
-              value={formData.username}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  username: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div>
-          {errorData.username?.length > 0 && errorData.username.join(",")}
-        </div>
-        <div>
-          <label>
-            密码:{" "}
-            <input
-              type="password"
-              value={formData.password}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  password: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div>
-          {errorData.password?.length > 0 && errorData.password.join(",")}
-        </div>
-        <div>
-          <label>
-            确认密码:{" "}
-            <input
-              type="password"
-              value={formData.passwordConfirm}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  passwordConfirm: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
-        <div>
-          {errorData.passwordConfirm?.length > 0 &&
-            errorData.passwordConfirm.join(",")}
-        </div>
-        <div>
-          <button type="submit">注册</button>
-        </div>
-      </form>
+      <Form
+        fields={[
+          {
+            label: "用户名",
+            type: "text",
+            value: formData.username,
+            onChange: (e) => onChange("username", e.target.value),
+            errors: errorData.username,
+          },
+          {
+            label: "密码",
+            type: "password",
+            value: formData.password,
+            onChange: (e) => onChange("password", e.target.value),
+            errors: errorData.password,
+          },
+          {
+            label: "确认密码",
+            type: "password",
+            value: formData.passwordConfirm,
+            onChange: (e) => onChange("passwordConfirm", e.target.value),
+            errors: errorData.passwordConfirm,
+          },
+        ]}
+        onSubmit={onSubmit}
+        buttons={<button type="submit">注册</button>}
+      />
     </>
   );
 };
