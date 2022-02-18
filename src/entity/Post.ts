@@ -23,9 +23,9 @@ export class Post {
   @UpdateDateColumn()
   updatedAt: Date;
   // 文章与用户的多对一关联
-  @ManyToOne((type) => User, (user) => user.posts)
+  @ManyToOne("User", "posts")
   author: User;
   // 文章与评论的一对多关联
-  @OneToMany((type) => Comment, (comment) => comment.post)
+  @OneToMany("Comment", "post")
   comments: Comment[];
 }

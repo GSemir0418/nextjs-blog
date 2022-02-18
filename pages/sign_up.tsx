@@ -6,7 +6,7 @@ const signUp: NextPage = () => {
   const { form } = useForm(
     { username: "", password: "", passwordConfirm: "" },
     {
-      request: (formData) => axios.post("api/v1/users", formData),
+      request: (formData) => axios.post("/api/v1/users", formData),
       message: "注册成功",
     },
     [

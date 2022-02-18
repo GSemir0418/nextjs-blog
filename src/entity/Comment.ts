@@ -20,9 +20,9 @@ export class Comment {
   @UpdateDateColumn()
   updatedAt: Date;
   // 评论与用户的多对一关联
-  @ManyToOne((type) => User, (user) => user.comments)
+  @ManyToOne("User", "comments")
   user: User;
   // 评论与文章的多对一关联
-  @ManyToOne((type) => Post, (post) => post.comments)
+  @ManyToOne("Post", "comments")
   post: Post;
 }

@@ -26,10 +26,10 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
   // 用户与文章的一对多关系
-  @OneToMany((type) => Post, (post) => post.author)
+  @OneToMany("Post", "author")
   posts: Post[];
   // 用户与评论的一对多关系
-  @OneToMany((type) => Comment, (comment) => comment.user)
+  @OneToMany("Comment", "user")
   comments: Comment[];
   // 以上为users表的列配置
 

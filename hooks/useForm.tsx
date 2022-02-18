@@ -60,9 +60,10 @@ export function useForm<T>(
           <label>
             {field.label}
             {field.type === "textarea" ? (
-              <textarea onChange={(e) => onChange(field.key, e.target.value)}>
-                {formData[field.key]}
-              </textarea>
+              <textarea
+                onChange={(e) => onChange(field.key, e.target.value)}
+                value={formData[field.key].toString()}
+              />
             ) : (
               <input
                 type={field.type}

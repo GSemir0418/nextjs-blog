@@ -8,7 +8,7 @@ const signIn: NextPage<{ user: User }> = (props) => {
   const { form } = useForm(
     { username: "", password: "" },
     {
-      request: (formData) => axios.post("api/v1/sessions", formData),
+      request: (formData) => axios.post("/api/v1/sessions", formData),
       message: "登录成功",
     },
     [
