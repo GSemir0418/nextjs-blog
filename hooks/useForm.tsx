@@ -10,7 +10,7 @@ export function useForm<T>(
   initFormData: T,
   submit: {
     request: (fd: T) => Promise<AxiosResponse<T>>;
-    message: string;
+    success: () => void;
   },
   fields: Field<T>[],
   buttons: ReactChild
@@ -38,18 +38,16 @@ export function useForm<T>(
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      submit.request(formData).then(
-        () => {
-          window.alert(submit.message);
-        },
-        (error) => {
-          if (error.response) {
-            if (error.response.status === 422) {
-              setErrorData(error.response.data);
-            }
+      submit.request(formData).then(submit.success, (error) => {
+        if (error.response) {
+          if (error.response.status === 422) {
+            setErrorData(error.response.data);
+          } else if (error.response.status === 401) {
+            window.alert("请先登录");
+            window.location.href = "/sign_in?return_to=/posts/new";
           }
         }
-      );
+      });
     },
     [submit, formData]
   );

@@ -3,13 +3,20 @@ import { useForm } from "hooks/useForm";
 import withSession from "lib/withSession";
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next";
 import { User } from "src/entity/User";
+import qs from "query-string";
 
 const signIn: NextPage<{ user: User }> = (props) => {
   const { form } = useForm(
     { username: "", password: "" },
     {
       request: (formData) => axios.post("/api/v1/sessions", formData),
-      message: "登录成功",
+      // 登录后需利用return_to参数返回到指定路由
+      success: () => {
+        window.alert("登录成功");
+        // 使用query-string库解析url
+        const query = qs.parse(window.location.search);
+        window.location.href = query.return_to.toString();
+      },
     },
     [
       { label: "用户名", type: "text", key: "username" },
@@ -33,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = withSession(
     const user = context.req.session.get("currentUser");
     return {
       props: {
-        user: JSON.parse(JSON.stringify(user)),
+        user: JSON.parse(JSON.stringify(user ?? "")),
       },
     };
   }

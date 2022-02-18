@@ -7,7 +7,7 @@ const signUp: NextPage = () => {
     { username: "", password: "", passwordConfirm: "" },
     {
       request: (formData) => axios.post("/api/v1/users", formData),
-      message: "注册成功",
+      success: () => window.alert("注册成功"),
     },
     [
       { label: "用户名", type: "text", key: "username" },
