@@ -7,7 +7,10 @@ const createPost: NextPage = () => {
     { title: "", content: "" },
     {
       request: (formData) => axios.post("/api/v1/posts", formData),
-      success: () => window.alert("提交成功"),
+      success: () => {
+        window.alert("提交成功");
+        window.location.href = "/posts";
+      },
     },
     [
       { label: "标题", type: "text", key: "title" },
