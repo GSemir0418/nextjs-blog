@@ -9,10 +9,11 @@ type Props = {
   count: number;
   page: number;
   pageSize: number;
+  totalPage: number;
 };
 
 const PostsIndex: NextPage<Props> = (props) => {
-  const { posts, count, page, pageSize } = props;
+  const { posts, count, page, pageSize, totalPage } = props;
   return (
     <div>
       <h1>文章列表</h1>
@@ -26,12 +27,16 @@ const PostsIndex: NextPage<Props> = (props) => {
       <footer>
         共{count}篇文章,当前是第{page}页,每页{pageSize}条
         <div>
-          <Link href={`?page=${page - 1}`}>
-            <a>上一页</a>
-          </Link>
-          <Link href={`?page=${page + 1}`}>
-            <a>下一页</a>
-          </Link>
+          {page !== 1 && (
+            <Link href={`?page=${page - 1}`}>
+              <a>上一页</a>
+            </Link>
+          )}
+          {page < totalPage && (
+            <Link href={`?page=${page + 1}`}>
+              <a>下一页</a>
+            </Link>
+          )}
         </div>
       </footer>
     </div>
@@ -58,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       count,
       page,
       pageSize,
+      totalPage: Math.floor(count / pageSize),
     },
   };
 };
