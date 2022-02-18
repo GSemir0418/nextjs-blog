@@ -1,4 +1,5 @@
-import { FormEventHandler, ReactChild, useCallback, useState } from "react";
+import { AxiosResponse } from "axios";
+import { ReactChild, useCallback, useState } from "react";
 type Field<T> = {
   label: string;
   type: "text" | "password" | "textarea";
@@ -7,7 +8,10 @@ type Field<T> = {
 // 由于传入的initFormData类型不能确定，所以用泛型T来表示，在useForm<>中声明泛型T
 export function useForm<T>(
   initFormData: T,
-  onSubmit: (formData: T) => void,
+  submit: {
+    request: (fd: T) => Promise<AxiosResponse<T>>;
+    message: string;
+  },
   fields: Field<T>[],
   buttons: ReactChild
 ) {
@@ -31,15 +35,26 @@ export function useForm<T>(
     },
     [formData]
   );
-  const _onSubmit = useCallback(
+  const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      onSubmit(formData);
+      submit.request(formData).then(
+        () => {
+          window.alert(submit.message);
+        },
+        (error) => {
+          if (error.response) {
+            if (error.response.status === 422) {
+              setErrorData(error.response.data);
+            }
+          }
+        }
+      );
     },
-    [onSubmit, formData]
+    [submit, formData]
   );
   const form = (
-    <form onSubmit={_onSubmit}>
+    <form onSubmit={onSubmit}>
       {fields.map((field, index) => (
         <div key={index}>
           <label>
