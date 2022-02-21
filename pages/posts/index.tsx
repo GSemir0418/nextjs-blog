@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // 从url中分离出page
   const { query } = qs.parseUrl(context.req.url);
   const page = parseInt(query.page?.toString() || "1");
-  const pageSize = 1;
+  const pageSize = 5;
   // 查询数据库，并返回posts和总数count
   const [posts, count] = await connection.manager.findAndCount(Post, {
     skip: (page - 1) * pageSize,
