@@ -9,6 +9,6 @@ RUN yarn install
 # 将本地根目录下的全部文件都拷贝至工作目录
 COPY . .
 # 暴露3000端口
-EXPOSE 9000
+EXPOSE 3000
 # 运行命令
 CMD [ "yarn", "start"]
