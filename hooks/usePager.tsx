@@ -31,40 +31,42 @@ export function usePager(options: Options) {
     []
   );
 
-  const pager = (
-    <div className="wrapper">
-      {page !== 1 && (
-        <Link href={urlMaker(page - 1)}>
-          <a>{"<"}</a>
-        </Link>
-      )}
-      {result.map((i) =>
-        i === -1 ? (
-          <span>...</span>
-        ) : (
-          <Link href={urlMaker(i)}>
-            <a>{i}</a>
+  const pager =
+    totalPage > 1 ? (
+      <div className="wrapper">
+        {page !== 1 && (
+          <Link href={urlMaker(page - 1)}>
+            <a>{"<"}</a>
           </Link>
-        )
-      )}
-      {page < totalPage && (
-        <Link href={urlMaker(page + 1)}>
-          <a>{">"}</a>
-        </Link>
-      )}
-      <span>
-        第 {page} / {totalPage} 页
-      </span>
-      <style jsx>{`
-        .wrapper {
-          margin: 0 -8px;
-        }
-        .wrapper > a,
-        .wrapper > span {
-          margin: 0 8px;
-        }
-      `}</style>
-    </div>
-  );
+        )}
+        {result.map((i) =>
+          i === -1 ? (
+            <span>...</span>
+          ) : (
+            <Link href={urlMaker(i)}>
+              <a>{i}</a>
+            </Link>
+          )
+        )}
+        {page < totalPage && (
+          <Link href={urlMaker(page + 1)}>
+            <a>{">"}</a>
+          </Link>
+        )}
+        <span>
+          第 {page} / {totalPage} 页
+        </span>
+        <style jsx>{`
+          .wrapper {
+            margin: 0 -8px;
+            padding: 8px 0;
+          }
+          .wrapper > a,
+          .wrapper > span {
+            margin: 0 8px;
+          }
+        `}</style>
+      </div>
+    ) : null;
   return { pager };
 }

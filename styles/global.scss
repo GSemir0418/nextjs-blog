@@ -1,4 +1,14 @@
-*{
+* {
   margin: 0;
   padding: 0;
+}
+a{
+  color: #4caf50;
+  border-bottom: none;
+  &:visited{
+    color: #4caf50;
+  }
+  &:hover{
+    color: #c0ca33;
+  }
 }
