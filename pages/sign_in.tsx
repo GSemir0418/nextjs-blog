@@ -14,8 +14,8 @@ const signIn: NextPage<{ user: User }> = (props) => {
       success: () => {
         window.alert("登录成功");
         // 使用query-string库解析url
-        const query = qs.parse(window.location.search);
-        window.location.href = query.return_to.toString();
+        const query = qs.parse(window.location.search.substring(1));
+        window.location.href = query.return_to?.toString() || '/posts';
       },
     },
     [
